@@ -1,3 +1,5 @@
+import base64
+
 from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import Response
 from pydantic import BaseModel
@@ -8,14 +10,24 @@ from utils.elevenlabs_config import stt, tts
 app = FastAPI()
 
 
+@app.get("/health")
+async def health():
+    return {"ok": True}
+
+
 class ChatIn(BaseModel):
     session_id: str
     message: str
+    include_audio: bool = False
 
 
 @app.post("/chat")
 async def chat(body: ChatIn):
-    return {"reply": await run_agent(body.session_id, body.message)}
+    reply = await run_agent(body.session_id, body.message)
+    if not body.include_audio:
+        return {"reply": reply}
+    audio = await tts(reply)
+    return {"reply": reply, "audio": base64.b64encode(audio).decode("ascii")}
 
 
 @app.post("/voice")

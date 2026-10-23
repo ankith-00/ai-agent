@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.environ["ELEVENLABS_API_KEY"]
-VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")
+VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")  # VOICE : George
 
 URL = "https://api.elevenlabs.io/v1"
 HEADERS = {"xi-api-key": API_KEY}
